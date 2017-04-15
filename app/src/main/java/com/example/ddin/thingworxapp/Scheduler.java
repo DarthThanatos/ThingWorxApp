@@ -64,7 +64,7 @@ public class Scheduler {
     public void scheduleSensorUpdate(SensorEvent sensorEvent){
         long curTime = System.currentTimeMillis();
         long diffTime = curTime - lastSensorUpdate;
-        if(diffTime > 1000){
+        if(diffTime > 5000){
             lastSensorUpdate = curTime;
             boolean sensorChangeAcknowledged = sensorSystem.processSensor(sensorEvent, diffTime);
 

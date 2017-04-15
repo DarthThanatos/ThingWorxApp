@@ -83,7 +83,7 @@ public class SensorSystem {
         float x = sensorEvent.values[0];
         float y = sensorEvent.values[1];
         float z = sensorEvent.values[2];
-        return String.valueOf(Math.floor(z));
+        return String.valueOf(z);
     }
 
     public boolean processSensor(SensorEvent sensorEvent, long diffTime) {
