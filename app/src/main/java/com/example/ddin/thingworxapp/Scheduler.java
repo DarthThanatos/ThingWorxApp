@@ -28,6 +28,7 @@ public class Scheduler {
     private static volatile boolean shouldSend = true;
 
     private Timer timer;
+    private boolean sendButtonHit = false;
 
     public Scheduler(MainActivity parent, ConcurrentHashMap appProperties) {
         this.parent = parent;
@@ -52,7 +53,7 @@ public class Scheduler {
     String appKey;
 
     private void setURLParts(){
-        ip = parent.viewGetter.getEditText("ip");
+        ip = parent.viewGetter.getEditText("ip");System.out.println("Ip from view getter: " + ip);
         appKey = parent.viewGetter.getEditText("appKey");
         appProperties.put("ip",ip);
         appProperties.put("appKey", appKey);
@@ -64,7 +65,7 @@ public class Scheduler {
     public void scheduleSensorUpdate(SensorEvent sensorEvent){
         long curTime = System.currentTimeMillis();
         long diffTime = curTime - lastSensorUpdate;
-        if(diffTime > 5000){
+        if(diffTime > 5000 && sendButtonHit){
             lastSensorUpdate = curTime;
             boolean sensorChangeAcknowledged = sensorSystem.processSensor(sensorEvent, diffTime);
 
@@ -141,11 +142,13 @@ public class Scheduler {
         };
         if(on){
             resumeTimer(timerTask);
+            sendButtonHit = true;
         }
         else{
             appProperties.put("connectionMessageText", "No data is currently sent to TWX");
             parent.runOnUiThread(new ViewSetter(parent, appProperties));
             pauseTimer();
+            sendButtonHit = false;
         }
     }
 
